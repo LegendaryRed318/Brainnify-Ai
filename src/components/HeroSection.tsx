@@ -38,7 +38,7 @@ const HeroSection = () => {
         </a>
       </div>
 
-      <p className="text-dim text-xs mb-10 fade-up visible">Free forever · No credit card needed · Works on Windows, Mac & Linux</p>
+      <p className="text-dim text-xs mb-10 fade-up visible">Free forever · No credit card needed · Windows only (Mac & Linux coming soon)</p>
 
       <div className="flex justify-center gap-2.5 flex-wrap mb-12 fade-up visible">
         {["🪟 Windows 10/11", "🍎 macOS 12+", "🐧 Linux"].map((os) => (
