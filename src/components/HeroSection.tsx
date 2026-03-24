@@ -47,7 +47,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <h1 className="font-heading text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold leading-[1.1] tracking-tight mb-8 gradient-text fade-up visible">
+      <h1 className="font-heading text-[clamp(2rem,4.5vw,3.2rem)] font-extrabold leading-[1.2] tracking-tight mb-8 gradient-text fade-up visible">
         Turn 2 hours of studying<br />into 10 minutes.
       </h1>
 
