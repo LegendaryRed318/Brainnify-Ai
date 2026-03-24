@@ -21,11 +21,11 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <h1 className="font-heading text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[1.05] tracking-tight mb-6 gradient-text fade-up visible">
+      <h1 className="font-heading text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold leading-[1.1] tracking-tight mb-8 gradient-text fade-up visible">
         Turn 2 hours of studying<br />into 10 minutes.
       </h1>
 
-      <p className="text-[clamp(1rem,2.5vw,1.2rem)] text-muted-foreground max-w-[600px] mx-auto mb-12 font-light leading-relaxed fade-up visible">
+      <p className="text-[clamp(1rem,2.2vw,1.15rem)] text-muted-foreground max-w-[560px] mx-auto mb-14 font-light leading-[1.8] fade-up visible">
         Paste your notes, upload a PDF, or drop in a YouTube transcript. Brainify AI instantly creates summaries, flashcards, quizzes and simple explanations.
       </p>
 
