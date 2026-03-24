@@ -52,6 +52,23 @@ const AppPreview = () => {
             </div>
           </div>
         </div>
+
+        {/* Keyboard shortcuts hint */}
+        <div className="px-8 pb-5 flex items-center justify-center gap-6 border-t border-border pt-4">
+          {[
+            { keys: "⌘+V", label: "Paste notes" },
+            { keys: "⏎", label: "Generate" },
+            { keys: "⌘+S", label: "Save kit" },
+            { keys: "Tab", label: "Switch mode" },
+          ].map((shortcut) => (
+            <div key={shortcut.keys} className="flex items-center gap-2">
+              <kbd className="bg-foreground/[0.08] border border-border rounded px-1.5 py-0.5 text-[0.65rem] font-mono text-electric font-semibold">
+                {shortcut.keys}
+              </kbd>
+              <span className="text-[0.65rem] text-muted-foreground">{shortcut.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

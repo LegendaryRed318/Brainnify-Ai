@@ -1,11 +1,37 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const useCountUp = (target: number, duration: number = 2000) => {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    if (!started) return;
+    const startTime = Date.now();
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [started, target, duration]);
+
+  return { count, start: () => setStarted(true) };
+};
 
 const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
+  const counter = useCountUp(12847, 2500);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("visible");
+          counter.start();
+        }
+      }),
       { threshold: 0.1 }
     );
     ref.current?.querySelectorAll(".fade-up").forEach((el) => observer.observe(el));
@@ -48,6 +74,7 @@ const HeroSection = () => {
         ))}
       </div>
 
+      {/* Animated student counter */}
       <div className="flex items-center justify-center gap-3 text-muted-foreground text-sm fade-up visible">
         <div className="flex">
           {[
@@ -65,7 +92,12 @@ const HeroSection = () => {
             </div>
           ))}
         </div>
-        Join students already using Brainify AI
+        <span>
+          <span className="font-heading font-bold text-foreground tabular-nums">
+            {counter.count.toLocaleString()}
+          </span>
+          {" "}students already studying smarter
+        </span>
       </div>
     </section>
   );
