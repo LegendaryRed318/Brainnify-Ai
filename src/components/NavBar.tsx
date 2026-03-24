@@ -1,8 +1,11 @@
+import logo from "@/assets/brainify-logo.png";
+
 const NavBar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-[100] px-[5%] h-[68px] flex items-center justify-between glass-nav border-b border-border">
       <a href="#" className="text-foreground font-heading font-bold text-lg no-underline flex items-center gap-2">
-        <span className="text-xl">🧠</span> Brainify AI
+        <img src={logo} alt="Brainify AI" className="h-8 w-auto" />
+        Brainify AI
       </a>
       <div className="flex items-center gap-7">
         <a href="#features" className="text-muted-foreground no-underline text-sm font-medium hover:text-foreground transition-colors hidden md:inline">Features</a>
