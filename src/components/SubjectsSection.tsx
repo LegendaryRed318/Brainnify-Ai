@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 
 const subjects = [
   { label: "Biology", color: "from-emerald-500/20 to-emerald-500/5 border-emerald-500/25 text-emerald-300" },
@@ -18,37 +18,28 @@ const subjects = [
 ];
 
 const SubjectsSection = () => {
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
-      { threshold: 0.1 }
-    );
-    ref.current?.querySelectorAll(".fade-up").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const ref = useInViewAnimation();
 
   return (
-    <section id="subjects" className="relative z-[1] py-24" ref={ref}>
+    <section id="subjects" className="relative z-[1] py-28" ref={ref}>
       <div className="container">
-        <div className="text-center mb-12 fade-up">
-          <div className="inline-flex items-center gap-1.5 bg-primary/[0.12] border border-primary/25 rounded-full px-3.5 py-1 text-xs text-electric font-medium tracking-wider uppercase mb-5">
+        <div className="text-center mb-14 fade-up">
+          <div className="inline-flex items-center gap-1.5 bg-primary/[0.12] border border-primary/25 rounded-full px-3.5 py-1 text-xs text-electric font-medium tracking-wider uppercase mb-6">
             ✦ Popular Subjects
           </div>
-          <h2 className="font-heading text-[clamp(1.8rem,4vw,3rem)] font-extrabold leading-snug tracking-tight mb-5">
+          <h2 className="font-heading text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight tracking-tight mb-5">
             Whatever you study,<br />Brainify handles it
           </h2>
-          <p className="text-muted-foreground text-lg font-light max-w-[520px] mx-auto leading-relaxed">
+          <p className="text-muted-foreground text-base font-light max-w-xl mx-auto leading-relaxed">
             From GCSEs to university — students use Brainify across every subject.
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3 max-w-[700px] mx-auto fade-up fade-up-d1">
+        <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto fade-up fade-up-d1">
           {subjects.map((subject, i) => (
             <div
               key={subject.label}
-              className={`bg-gradient-to-br ${subject.color} border rounded-full px-5 py-2.5 text-sm font-medium transition-all hover:scale-105 hover:-translate-y-0.5 cursor-default`}
+              className={`bg-gradient-to-br ${subject.color} border rounded-full px-6 py-3 text-sm font-medium transition-all hover:scale-105 hover:-translate-y-0.5 cursor-default`}
               style={{ animationDelay: `${i * 0.05}s` }}
             >
               {subject.label}

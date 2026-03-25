@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import logo from "@/assets/brainify-logo.png";
 
 const useCountUp = (target: number, duration: number = 2000) => {
   const [count, setCount] = useState(0);
@@ -39,18 +40,27 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="hero" className="relative z-[1] pt-36 pb-20 px-[5%]" ref={ref}>
-      <div className="max-w-[1000px] mx-auto text-center">
+    <section id="hero" className="relative z-[1] pt-40 pb-24 px-[5%]" ref={ref}>
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Logo */}
+        <div className="fade-up mb-8">
+          <img
+            src={logo}
+            alt="Brainify AI"
+            className="h-16 w-16 mx-auto drop-shadow-[0_0_20px_rgba(124,58,237,0.4)] md:h-16 sm:h-12"
+          />
+        </div>
+
         {/* Badge */}
-        <div className="fade-up mb-10">
-          <div className="inline-flex items-center gap-2 bg-primary/15 border border-primary/35 rounded-full px-4 py-1.5 text-xs font-medium text-electric tracking-wide">
+        <div className="fade-up mb-8">
+          <div className="inline-flex items-center gap-2 bg-primary/15 border border-primary/35 rounded-full px-5 py-2 text-xs font-medium text-electric tracking-wide">
             <span className="w-1.5 h-1.5 bg-electric rounded-full animate-pulse-dot" />
             Desktop App — Free to Download
           </div>
         </div>
 
         {/* Headline */}
-        <h1 className="font-heading text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.15] tracking-tight max-w-[780px] mx-auto mb-7 fade-up">
+        <h1 className="font-heading text-[clamp(2.2rem,5vw,3.8rem)] font-bold leading-[1.1] tracking-tight max-w-3xl mx-auto mb-8 fade-up">
           <span className="text-foreground">Turn </span>
           <span className="gradient-text">2 hours of studying</span>
           <br />
@@ -59,29 +69,33 @@ const HeroSection = () => {
         </h1>
 
         {/* Description */}
-        <p className="text-muted-foreground text-[clamp(0.95rem,1.8vw,1.1rem)] max-w-[540px] mx-auto mb-12 font-light leading-[1.75] fade-up">
+        <p className="text-muted-foreground text-[clamp(1rem,1.8vw,1.15rem)] max-w-xl mx-auto mb-14 font-light leading-relaxed fade-up">
           Paste your notes, upload a PDF, or drop in a YouTube transcript. Brainify AI instantly creates summaries, flashcards, quizzes and simple explanations.
         </p>
 
         {/* CTAs */}
-        <div className="flex gap-4 justify-center flex-wrap mb-5 fade-up">
-          <a href="#download" className="btn-gradient text-primary-foreground px-8 py-3.5 rounded-xl no-underline font-semibold text-base inline-flex items-center gap-2 transition-all">
+        <div className="flex gap-5 justify-center flex-wrap mb-6 fade-up">
+          <a href="#download" className="btn-gradient text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-105">
             ⬇️ Download Free
           </a>
-          <a href="#how" className="btn-ghost text-foreground px-8 py-3.5 rounded-xl no-underline font-semibold text-base inline-flex items-center gap-2 transition-all">
+          <a href="#how" className="btn-ghost text-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-105">
             See how it works
           </a>
         </div>
 
-        <p className="text-dim text-xs mb-10 fade-up">Free forever · No credit card needed · Windows only (Mac & Linux coming soon)</p>
+        <p className="text-dim text-sm mb-10 fade-up">Windows available now · macOS & Linux coming soon · Mobile coming later</p>
 
         {/* Platform badges */}
-        <div className="flex justify-center gap-2.5 flex-wrap mb-10 fade-up">
-          {["🪟 Windows 10/11", "🍎 macOS 12+", "🐧 Linux"].map((os) => (
-            <div key={os} className="flex items-center gap-1.5 bg-foreground/[0.04] border border-border rounded-full px-3 py-1 text-xs text-muted-foreground">
-              {os}
-            </div>
-          ))}
+        <div className="flex justify-center gap-3 flex-wrap mb-10 fade-up">
+          <div className="flex items-center gap-1.5 bg-primary/10 border border-primary/25 rounded-full px-4 py-1.5 text-xs font-medium text-electric">
+            🪟 Windows 10/11
+          </div>
+          <div className="flex items-center gap-1.5 bg-foreground/[0.04] border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
+            🍎 macOS 12+ <span className="bg-foreground/10 rounded px-1.5 py-0.5 text-[0.6rem] ml-1">Soon</span>
+          </div>
+          <div className="flex items-center gap-1.5 bg-foreground/[0.04] border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
+            🐧 Linux <span className="bg-foreground/10 rounded px-1.5 py-0.5 text-[0.6rem] ml-1">Soon</span>
+          </div>
         </div>
 
         {/* Student counter */}
@@ -96,7 +110,7 @@ const HeroSection = () => {
             ].map((bg, i) => (
               <div
                 key={i}
-                className={`w-[28px] h-[28px] rounded-full border-2 border-background ${bg} flex items-center justify-center text-[10px] font-semibold text-primary-foreground ${i > 0 ? "-ml-2" : ""}`}
+                className={`w-8 h-8 rounded-full border-2 border-background ${bg} flex items-center justify-center text-[11px] font-semibold text-primary-foreground ${i > 0 ? "-ml-2" : ""}`}
               >
                 {["A", "J", "S", "M", "R"][i]}
               </div>
