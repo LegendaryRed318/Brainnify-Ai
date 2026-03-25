@@ -52,8 +52,15 @@
     @apply border-border;
   }
 
+  html {
+    font-size: 18px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: 'DM Sans', sans-serif;
     overflow-x: hidden;
   }
@@ -72,6 +79,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Syne', sans-serif;
+    @apply tracking-tight;
   }
 }
 
