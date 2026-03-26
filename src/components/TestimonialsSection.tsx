@@ -74,7 +74,7 @@ const TestimonialsSection = () => {
   return (
     <section id="testimonials" className="relative py-28" ref={ref} style={{ zIndex: 1 }}>
       <InteractiveGrid />
-      <div className="container relative" style={{ zIndex: 5, pointerEvents: "auto" }}>
+      <div className="container relative" style={{ zIndex: 1 }}>
         <div className="text-center mb-16 fade-up">
           <div className="inline-flex items-center gap-1.5 bg-primary/[0.12] border border-primary/25 rounded-full px-3.5 py-1 text-xs text-electric font-medium tracking-wider uppercase mb-5">
             ✦ Social Proof
