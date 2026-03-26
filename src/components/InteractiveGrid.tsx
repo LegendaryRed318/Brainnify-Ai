@@ -14,8 +14,8 @@ const InteractiveGrid = () => {
       const x = clientX - rect.left;
       const y = clientY - rect.top;
       setGlow({ x, y });
-      const nx = (clientX / window.innerWidth - 0.5) * 12;
-      const ny = (clientY / window.innerHeight - 0.5) * 12;
+      const nx = (clientX / window.innerWidth - 0.5) * 16;
+      const ny = (clientY / window.innerHeight - 0.5) * 16;
       setOffset({ x: nx, y: ny });
     });
   }, []);
@@ -40,23 +40,25 @@ const InteractiveGrid = () => {
       onMouseMove={onMouseMove}
       onTouchMove={onTouchMove}
       onMouseLeave={onMouseLeave}
-      className="absolute inset-0 overflow-hidden pointer-events-auto"
-      style={{ zIndex: 0 }}
+      className="absolute inset-0 overflow-hidden"
+      style={{ zIndex: 1 }}
     >
       {/* Grid pattern that shifts with cursor */}
       <div
-        className="absolute inset-[-20px] opacity-30 transition-transform duration-700 ease-out"
+        className="absolute inset-[-40px] opacity-40"
         style={{
-          backgroundImage: `linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)`,
           backgroundSize: "50px 50px",
           transform: `translate(${offset.x}px, ${offset.y}px)`,
+          transition: "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
       {/* Radial glow following cursor */}
       <div
-        className="absolute inset-0 transition-opacity duration-300 pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(circle 250px at ${glow.x}px ${glow.y}px, rgba(139,92,246,0.12), transparent 70%)`,
+          background: `radial-gradient(circle 300px at ${glow.x}px ${glow.y}px, rgba(139,92,246,0.15), transparent 70%)`,
+          transition: "background 0.15s ease-out",
         }}
       />
     </div>

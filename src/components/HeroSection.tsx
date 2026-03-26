@@ -47,7 +47,7 @@ const HeroSection = () => {
           <img
             src={logo}
             alt="Brainify AI logo"
-            className="w-[200px] md:w-[300px] lg:w-[380px] object-contain scale-110 md:scale-125 drop-shadow-[0_0_50px_rgba(139,92,246,0.4)]"
+            className="w-[200px] md:w-[300px] lg:w-[380px] object-contain scale-110 md:scale-125 drop-shadow-[0_0_50px_rgba(139,92,246,0.4)] mix-blend-screen"
           />
         </div>
 
