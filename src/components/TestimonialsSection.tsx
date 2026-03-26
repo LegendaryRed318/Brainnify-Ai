@@ -1,4 +1,5 @@
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
+import InteractiveGrid from "@/components/InteractiveGrid";
 
 const testimonials = [
   {
