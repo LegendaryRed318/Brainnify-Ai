@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useInViewAnimation } from "@/hooks/useInViewAnimation";
-import logo from "@/assets/brainify-logo.png";
+import logo from "@/assets/logo-brain.png";
 
 const navLinks = [
   { href: "#features", label: "Features" },
   { href: "#how", label: "How it works" },
-  { href: "#subjects", label: "Popular Subjects" },
-  { href: "#comparison", label: "Why Switch" },
+  { href: "#subjects", label: "✦ Popular Subjects" },
+  { href: "#comparison", label: "✦ Why Switch" },
   { href: "#pricing", label: "Pricing" },
   { href: "#download", label: "Download" },
 ];
@@ -17,7 +16,7 @@ const NavBar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-[100] px-[5%] h-[72px] flex items-center justify-between glass-nav border-b border-border">
       <a href="#" className="text-foreground font-heading font-semibold text-xl no-underline flex items-center gap-3">
-        <img src={logo} alt="Brainify AI" className="h-10 w-10 object-contain drop-shadow-[0_0_12px_rgba(124,58,237,0.4)]" />
+        <img src={logo} alt="Brainify AI" className="h-10 w-10 object-contain drop-shadow-[0_0_12px_rgba(139,92,246,0.4)]" />
         Brainify AI
       </a>
 
