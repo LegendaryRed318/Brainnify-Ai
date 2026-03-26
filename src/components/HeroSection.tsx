@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import logo from "@/assets/brainify-logo.png";
+import logo from "@/assets/logo-brain.png";
 
 const useCountUp = (target: number, duration: number = 2000) => {
   const [count, setCount] = useState(0);
@@ -40,14 +40,14 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="hero" className="relative z-[1] pt-40 pb-24 px-[5%]" ref={ref}>
-      <div className="max-w-4xl mx-auto text-center">
-        {/* Logo */}
-        <div className="fade-up mb-8">
+    <section id="hero" className="relative z-[1] pt-32 pb-24 px-[5%]" ref={ref}>
+      <div className="max-w-[1000px] mx-auto text-center">
+        {/* Logo — Big, dominant, zoomed */}
+        <div className="fade-up mb-10 flex items-center justify-center">
           <img
             src={logo}
-            alt="Brainify AI"
-            className="h-16 w-16 mx-auto drop-shadow-[0_0_20px_rgba(124,58,237,0.4)] md:h-16 sm:h-12"
+            alt="Brainify AI logo"
+            className="w-[200px] md:w-[300px] lg:w-[380px] object-contain scale-110 md:scale-125 drop-shadow-[0_0_50px_rgba(139,92,246,0.4)]"
           />
         </div>
 
@@ -60,7 +60,7 @@ const HeroSection = () => {
         </div>
 
         {/* Headline */}
-        <h1 className="font-heading text-[clamp(2.2rem,5vw,3.8rem)] font-bold leading-[1.1] tracking-tight max-w-3xl mx-auto mb-8 fade-up">
+        <h1 className="font-heading text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.15] tracking-tight max-w-[800px] mx-auto mb-8 fade-up">
           <span className="text-foreground">Turn </span>
           <span className="gradient-text">2 hours of studying</span>
           <br />
