@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/logo-brain.png";
+import InteractiveGrid from "@/components/InteractiveGrid";
 
 const useCountUp = (target: number, duration: number = 2000) => {
   const [count, setCount] = useState(0);
@@ -40,14 +41,16 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="hero" className="relative z-[1] pt-32 pb-24 px-[5%]" ref={ref}>
-      <div className="max-w-[1000px] mx-auto text-center">
-        {/* Logo — Big, dominant, zoomed */}
+    <section id="hero" className="relative pt-32 pb-24 px-[5%]" ref={ref}>
+      <InteractiveGrid />
+      <div className="max-w-[1000px] mx-auto text-center relative" style={{ zIndex: 1 }}>
+        {/* Logo — Big, dominant, multiply blend removes white bg */}
         <div className="fade-up mb-10 flex items-center justify-center">
           <img
             src={logo}
             alt="Brainify AI logo"
-            className="w-[200px] md:w-[300px] lg:w-[380px] object-contain scale-110 md:scale-125 drop-shadow-[0_0_50px_rgba(139,92,246,0.4)] mix-blend-screen"
+            className="w-[200px] md:w-[300px] lg:w-[380px] object-contain scale-110 md:scale-125 drop-shadow-[0_0_50px_rgba(139,92,246,0.4)]"
+            style={{ mixBlendMode: "multiply", filter: "brightness(1.15)" }}
           />
         </div>
 

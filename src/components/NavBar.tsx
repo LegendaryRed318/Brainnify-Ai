@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "@/assets/logo-brain.png";
+import { BrainifyLogo } from "@/components/BrainifyLogo";
 
 const navLinks = [
   { href: "#features", label: "Features" },
@@ -15,9 +15,8 @@ const NavBar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-[100] px-[5%] h-[72px] flex items-center justify-between glass-nav border-b border-border">
-      <a href="#" className="text-foreground font-heading font-semibold text-xl no-underline flex items-center gap-3">
-        <img src={logo} alt="Brainify AI" className="h-10 w-10 object-contain drop-shadow-[0_0_12px_rgba(139,92,246,0.4)] mix-blend-screen" />
-        Brainify AI
+      <a href="#" className="no-underline">
+        <BrainifyLogo size={36} showText={true} />
       </a>
 
       {/* Desktop nav */}
