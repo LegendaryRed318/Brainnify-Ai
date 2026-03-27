@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrainifyLogo } from "@/components/BrainifyLogo";
 
 const navLinks = [
@@ -12,9 +12,40 @@ const navLinks = [
 
 const NavBar = () => {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const sections = navLinks.map(l => l.href.slice(1)).map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(`#${entry.target.id}`);
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: "-80px 0px -50% 0px" }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] px-[5%] h-[72px] flex items-center justify-between glass-nav border-b border-border">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-[100] px-[5%] h-[72px] flex items-center justify-between glass-nav border-b transition-all duration-300 ${
+        scrolled ? "border-primary/15 shadow-[0_4px_30px_rgba(0,0,0,0.3)]" : "border-border"
+      }`}
+      style={{ animation: "slide-down-in 0.5s ease-out both" }}
+    >
       <a href="#" className="no-underline">
         <BrainifyLogo size={36} showText={true} />
       </a>
@@ -22,11 +53,17 @@ const NavBar = () => {
       {/* Desktop nav */}
       <div className="hidden lg:flex items-center gap-7">
         {navLinks.map((link) => (
-          <a key={link.href} href={link.href} className="text-muted-foreground no-underline text-sm font-medium hover:text-foreground transition-colors">
+          <a
+            key={link.href}
+            href={link.href}
+            className={`no-underline text-sm font-medium transition-colors ${
+              activeSection === link.href ? "text-electric" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
             {link.label}
           </a>
         ))}
-        <a href="#download" className="btn-gradient text-primary-foreground px-6 py-2.5 rounded-xl font-semibold text-sm transition-all no-underline">
+        <a href="#download" className="btn-gradient animate-cta-pulse text-primary-foreground px-6 py-2.5 rounded-xl font-semibold text-sm transition-all no-underline">
           Try Free →
         </a>
       </div>
@@ -50,7 +87,9 @@ const NavBar = () => {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="text-foreground no-underline text-base font-medium py-2 border-b border-border"
+              className={`no-underline text-base font-medium py-2 border-b border-border ${
+                activeSection === link.href ? "text-electric" : "text-foreground"
+              }`}
             >
               {link.label}
             </a>

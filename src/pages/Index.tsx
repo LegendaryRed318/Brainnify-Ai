@@ -1,3 +1,4 @@
+import ScrollProgress from "@/components/ScrollProgress";
 import NavBar from "@/components/NavBar";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
 import HeroSection from "@/components/HeroSection";
@@ -19,10 +20,13 @@ import FooterSection from "@/components/FooterSection";
 
 const Index = () => {
   return (
-    <>
+    <div style={{ animation: "page-fade-in 0.4s ease-out both" }}>
+      <ScrollProgress />
       <BackgroundOrbs />
       <NavBar />
-      <HeroSection />
+      <div style={{ animation: "slide-up-in 0.6s ease-out 0.1s both" }}>
+        <HeroSection />
+      </div>
       <AppPreview />
       <FeaturesSection />
       <ComparisonSection />
@@ -38,7 +42,7 @@ const Index = () => {
       <FAQSection />
       <CTASection />
       <FooterSection />
-    </>
+    </div>
   );
 };
 

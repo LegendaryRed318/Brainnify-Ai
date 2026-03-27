@@ -44,14 +44,16 @@ const HeroSection = () => {
     <section id="hero" className="relative pt-32 pb-24 px-[5%]" ref={ref}>
       <InteractiveGrid />
       <div className="max-w-[1000px] mx-auto text-center relative" style={{ zIndex: 1 }}>
-        {/* Logo — Big, dominant, multiply blend removes white bg */}
+        {/* Logo */}
         <div className="fade-up mb-10 flex items-center justify-center">
-          <img
-            src={logo}
-            alt="Brainify AI logo"
-            className="w-[200px] md:w-[300px] lg:w-[380px] object-contain scale-110 md:scale-125 drop-shadow-[0_0_50px_rgba(139,92,246,0.4)]"
-            style={{ mixBlendMode: "multiply", filter: "brightness(1.15)" }}
-          />
+          <div className="animate-logo-float drop-shadow-[0_0_50px_rgba(139,92,246,0.4)] scale-110 md:scale-125">
+            <img
+              src={logo}
+              alt="Brainify AI logo"
+              className="w-[200px] md:w-[300px] lg:w-[380px] object-contain"
+              style={{ mixBlendMode: "multiply" }}
+            />
+          </div>
         </div>
 
         {/* Badge */}
@@ -65,10 +67,10 @@ const HeroSection = () => {
         {/* Headline */}
         <h1 className="font-heading text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.15] tracking-tight max-w-[800px] mx-auto mb-8 fade-up">
           <span className="text-foreground">Turn </span>
-          <span className="gradient-text">2 hours of studying</span>
+          <span className="gradient-text animate-shimmer" style={{ backgroundImage: 'linear-gradient(90deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)' }}>2 hours of studying</span>
           <br />
           <span className="text-foreground">into </span>
-          <span className="gradient-text">10 minutes.</span>
+          <span className="gradient-text animate-shimmer" style={{ backgroundImage: 'linear-gradient(90deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)', animationDelay: '0.5s' }}>10 minutes.</span>
         </h1>
 
         {/* Description */}
@@ -78,7 +80,7 @@ const HeroSection = () => {
 
         {/* CTAs */}
         <div className="flex gap-5 justify-center flex-wrap mb-6 fade-up">
-          <a href="#download" className="btn-gradient text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-105">
+          <a href="#download" className="btn-gradient animate-cta-pulse text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-105">
             ⬇️ Download Free
           </a>
           <a href="#how" className="btn-ghost text-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-105">
@@ -89,7 +91,7 @@ const HeroSection = () => {
         <p className="text-dim text-sm mb-10 fade-up">Windows available now · macOS & Linux coming soon · Mobile coming later</p>
 
         {/* Platform badges */}
-        <div className="flex justify-center gap-3 flex-wrap mb-10 fade-up">
+        <div className="flex justify-center gap-3 flex-wrap mb-8 fade-up">
           <div className="flex items-center gap-1.5 bg-primary/10 border border-primary/25 rounded-full px-4 py-1.5 text-xs font-medium text-electric">
             🪟 Windows 10/11
           </div>
@@ -99,6 +101,19 @@ const HeroSection = () => {
           <div className="flex items-center gap-1.5 bg-foreground/[0.04] border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
             🐧 Linux <span className="bg-foreground/10 rounded px-1.5 py-0.5 text-[0.6rem] ml-1">Soon</span>
           </div>
+        </div>
+
+        {/* Trust badges */}
+        <div className="flex justify-center gap-3 flex-wrap mb-10 fade-up">
+          {[
+            { icon: "🔒", label: "No account needed" },
+            { icon: "⚡", label: "Works offline" },
+            { icon: "🆓", label: "Free forever" },
+          ].map((badge) => (
+            <div key={badge.label} className="flex items-center gap-1.5 bg-foreground/[0.03] border border-border rounded-full px-3.5 py-1.5 text-[0.7rem] text-muted-foreground">
+              {badge.icon} {badge.label}
+            </div>
+          ))}
         </div>
 
         {/* Student counter */}
