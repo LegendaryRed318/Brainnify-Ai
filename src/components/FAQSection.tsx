@@ -13,7 +13,14 @@ const faqs = [
 
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [search, setSearch] = useState("");
   const ref = useInViewAnimation();
+
+  const filtered = faqs.filter(
+    (faq) =>
+      faq.q.toLowerCase().includes(search.toLowerCase()) ||
+      faq.a.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <section id="faq" className="relative z-[1] py-28" ref={ref}>
@@ -32,7 +39,18 @@ const FAQSection = () => {
           </div>
 
           <div className="flex flex-col fade-up fade-up-d1">
-            {faqs.map((faq, i) => (
+            {/* Search */}
+            <div className="mb-6">
+              <input
+                type="text"
+                placeholder="Search questions..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-foreground/[0.04] border border-border rounded-xl px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/40 transition-colors"
+              />
+            </div>
+
+            {filtered.map((faq, i) => (
               <div key={i} className="border-b border-border overflow-hidden">
                 <div
                   className="flex items-center justify-between py-6 cursor-pointer font-medium text-sm text-foreground select-none gap-4 hover:text-electric transition-colors"
@@ -43,13 +61,23 @@ const FAQSection = () => {
                     +
                   </div>
                 </div>
-                <div className={`overflow-hidden transition-all duration-350 ${openIndex === i ? "max-h-[200px]" : "max-h-0"}`}>
+                <div
+                  className="overflow-hidden transition-all duration-300 ease-in-out"
+                  style={{
+                    maxHeight: openIndex === i ? "200px" : "0px",
+                    opacity: openIndex === i ? 1 : 0,
+                  }}
+                >
                   <div className="pb-5 text-muted-foreground text-sm font-light leading-relaxed">
                     {faq.a}
                   </div>
                 </div>
               </div>
             ))}
+
+            {filtered.length === 0 && (
+              <p className="text-muted-foreground text-sm py-6">No matching questions found.</p>
+            )}
           </div>
         </div>
       </div>

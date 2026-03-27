@@ -59,7 +59,7 @@ const PricingSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto fade-up fade-up-d1">
           {/* Free */}
-          <div className="bg-surface border border-border rounded-2xl p-10 relative">
+          <div className="bg-surface border border-border rounded-2xl p-8 md:p-10 relative">
             <div className="font-heading text-sm font-bold tracking-widest uppercase text-muted-foreground mb-5">Free</div>
             <div className="font-heading text-5xl font-bold tracking-tighter leading-none mb-2">£0</div>
             <div className="text-muted-foreground text-sm mb-8">Forever free</div>
@@ -85,50 +85,61 @@ const PricingSection = () => {
           </div>
 
           {/* Pro */}
-          <div className="bg-surface border border-primary/50 rounded-2xl p-10 relative bg-gradient-to-br from-primary/[0.12] to-surface shadow-[0_0_60px_rgba(124,58,237,0.15)]">
-            <div className="absolute -top-3 right-6 bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 py-1.5 rounded-lg text-[0.7rem] font-bold tracking-wider uppercase whitespace-nowrap">
-              BEST VALUE
-            </div>
-            <div className="flex items-center gap-2 mb-5">
-              <span className="text-amber-400">⭐</span>
-              <span className="font-heading text-sm font-bold tracking-widest uppercase text-electric">Pro Membership</span>
-            </div>
+          <div className="relative rounded-2xl p-[1px] overflow-hidden">
+            {/* Rotating gradient border */}
+            <div className="absolute inset-0 animate-border-rotate rounded-2xl" />
+            <div className="relative bg-surface rounded-2xl p-8 md:p-10 bg-gradient-to-br from-primary/[0.12] to-surface">
+              <div className="absolute -top-3 right-6 bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 py-1.5 rounded-lg text-[0.7rem] font-bold tracking-wider uppercase whitespace-nowrap z-10">
+                BEST VALUE
+              </div>
+              <div className="flex items-center gap-2 mb-5">
+                <span className="text-amber-400">⭐</span>
+                <span className="font-heading text-sm font-bold tracking-widest uppercase text-electric">Pro Membership</span>
+              </div>
 
-            {/* Price */}
-            <div className="mb-2">
-              {billing === "annual" ? (
-                <div className="flex items-baseline gap-3">
-                  <span className="text-muted-foreground line-through text-xl font-medium">£120/year</span>
-                  <span className="font-heading text-5xl font-bold tracking-tighter leading-none">£48</span>
-                  <span className="text-muted-foreground text-lg font-light">/year</span>
+              {/* Price with transition */}
+              <div className="mb-2 relative overflow-hidden">
+                <div
+                  key={billing}
+                  className="transition-all duration-300"
+                  style={{ animation: "slide-up-in 0.3s ease-out" }}
+                >
+                  {billing === "annual" ? (
+                    <div className="flex items-baseline gap-3 flex-wrap">
+                      <span className="text-muted-foreground line-through text-xl font-medium">£120/year</span>
+                      <span className="font-heading text-5xl font-bold tracking-tighter leading-none">£48</span>
+                      <span className="text-muted-foreground text-lg font-light">/year</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-heading text-5xl font-bold tracking-tighter leading-none">£5</span>
+                      <span className="text-muted-foreground text-lg font-light">/month</span>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="flex items-baseline gap-2">
-                  <span className="font-heading text-5xl font-bold tracking-tighter leading-none">£5</span>
-                  <span className="text-muted-foreground text-lg font-light">/month</span>
-                </div>
-              )}
-            </div>
-            <div className="text-emerald-400 text-sm font-medium mb-8">
-              {billing === "annual" ? "Save over £70 per year" : "Cancel anytime"}
-            </div>
+              </div>
+              <div className="text-emerald-400 text-sm font-medium mb-8">
+                {billing === "annual" ? "Save over £70 per year" : "Cancel anytime"}
+              </div>
 
-            <div className="h-px bg-border mb-8" />
+              <div className="h-px bg-border mb-8" />
 
-            <div className="font-heading text-xs font-bold tracking-widest uppercase text-muted-foreground mb-5">
-              Everything in Pro:
+              <div className="font-heading text-xs font-bold tracking-widest uppercase text-muted-foreground mb-5">
+                Everything in Pro:
+              </div>
+              <ul className="flex flex-col gap-4 mb-10 list-none p-0">
+                {proFeatures.map((f) => (
+                  <li key={f} className="flex gap-3 items-start text-sm leading-relaxed text-foreground">
+                    <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-xs text-electric">✓</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <a href="#download" className="block text-center py-4 rounded-xl no-underline font-semibold text-base transition-all btn-gradient text-primary-foreground hover:scale-105">
+                Start Pro Now →
+              </a>
+              <p className="text-center text-muted-foreground text-xs mt-4">Chosen by 78% of Brainify users</p>
             </div>
-            <ul className="flex flex-col gap-4 mb-10 list-none p-0">
-              {proFeatures.map((f) => (
-                <li key={f} className="flex gap-3 items-start text-sm leading-relaxed text-foreground">
-                  <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-primary/30 flex items-center justify-center text-xs text-electric">✓</span>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <a href="#download" className="block text-center py-4 rounded-xl no-underline font-semibold text-base transition-all btn-gradient text-primary-foreground hover:scale-105">
-              Start Pro Now →
-            </a>
           </div>
         </div>
       </div>
