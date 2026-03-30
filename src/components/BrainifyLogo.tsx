@@ -15,16 +15,21 @@ export const BrainifyLogo = ({
 }: BrainifyLogoProps) => {
   return (
     <span className={`inline-flex items-center gap-3 ${className}`}>
-      <div className="drop-shadow-[0_0_12px_rgba(139,92,246,0.4)]">
+      <span style={{ filter: "drop-shadow(0 0 12px rgba(139,92,246,0.4))", display: "inline-flex" }}>
         <img
           src={logo}
           alt="Brainify AI"
           width={size}
           height={size}
-          className="object-contain"
-          style={{ mixBlendMode: "multiply" }}
+          style={{
+            width: size,
+            height: size,
+            objectFit: "contain",
+            mixBlendMode: "multiply",
+            display: "block",
+          }}
         />
-      </div>
+      </span>
       {showText && (
         <span className={`font-heading font-semibold text-foreground ${textSize}`}>
           Brainify AI
