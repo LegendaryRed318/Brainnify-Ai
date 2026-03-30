@@ -1,4 +1,5 @@
-import logo from "@/assets/logo-brain.png";
+import logo from "@/assets/logo-brain-transparent.png";
+import { forwardRef } from "react";
 
 interface BrainifyLogoProps {
   size?: number;
@@ -7,15 +8,18 @@ interface BrainifyLogoProps {
   className?: string;
 }
 
-export const BrainifyLogo = ({
-  size = 32,
-  showText = false,
-  textSize = "text-xl",
-  className = "",
-}: BrainifyLogoProps) => {
+export const BrainifyLogo = forwardRef<HTMLSpanElement, BrainifyLogoProps>(function BrainifyLogo(
+  {
+    size = 32,
+    showText = false,
+    textSize = "text-xl",
+    className = "",
+  },
+  ref,
+) {
   return (
-    <span className={`inline-flex items-center gap-3 ${className}`}>
-      <span style={{ filter: "drop-shadow(0 0 12px rgba(139,92,246,0.4))", display: "inline-flex" }}>
+    <span ref={ref} className={`inline-flex items-center gap-3 ${className}`}>
+      <span className="inline-flex drop-shadow-[0_0_12px_rgba(139,92,246,0.4)]">
         <img
           src={logo}
           alt="Brainify AI"
@@ -25,7 +29,6 @@ export const BrainifyLogo = ({
             width: size,
             height: size,
             objectFit: "contain",
-            mixBlendMode: "multiply",
             display: "block",
           }}
         />
@@ -37,6 +40,6 @@ export const BrainifyLogo = ({
       )}
     </span>
   );
-};
+});
 
 export default BrainifyLogo;

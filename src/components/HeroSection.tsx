@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import logo from "@/assets/logo-brain.png";
+import logo from "@/assets/logo-brain-transparent.png";
 import InteractiveGrid from "@/components/InteractiveGrid";
 
 const useCountUp = (target: number, duration: number = 2000) => {
@@ -52,7 +52,6 @@ const HeroSection = () => {
                 src={logo}
                 alt="Brainify AI logo"
                 className="w-[200px] md:w-[300px] lg:w-[380px] object-contain"
-                style={{ mixBlendMode: "multiply" }}
               />
             </div>
           </div>
