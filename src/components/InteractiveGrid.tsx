@@ -74,7 +74,7 @@ const InteractiveGrid = () => {
         const drawY = y + offsetY;
 
         // Cell fill
-        const fillAlpha = 0.02 + proximity * 0.08;
+        const fillAlpha = 0.09 + proximity * 0.08;
         const r = Math.round(139 * proximity);
         const g = Math.round(92 * proximity);
         const b = Math.round(246 * proximity);
