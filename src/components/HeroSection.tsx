@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import logo from "@/assets/logo-brain-transparent.png";
 import InteractiveGrid from "@/components/InteractiveGrid";
 
@@ -25,6 +25,7 @@ const useCountUp = (target: number, duration: number = 2000) => {
 const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
   const counter = useCountUp(12847, 2500);
+  const [liveExtra, setLiveExtra] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,20 +41,31 @@ const HeroSection = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Live ticking effect after count-up completes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveExtra((prev) => prev + Math.floor(Math.random() * 3) + 1);
+    }, (Math.random() * 45 + 45) * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const scrollToTryIt = useCallback(() => {
+    document.getElementById("tryit")?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   return (
     <section id="hero" className="relative pt-32 pb-24 px-[5%]" ref={ref}>
       <InteractiveGrid />
       <div className="max-w-[1000px] mx-auto text-center relative" style={{ zIndex: 1 }}>
         {/* Logo */}
         <div className="fade-up mb-10 flex items-center justify-center">
-          <div className="relative">
-            <div className="drop-shadow-[0_0_50px_rgba(139,92,246,0.4)]">
-              <img
-                src={logo}
-                alt="Brainify AI logo"
-                className="w-[200px] md:w-[300px] lg:w-[380px] object-contain"
-              />
-            </div>
+          <div className="drop-shadow-[0_0_50px_rgba(139,92,246,0.4)] scale-110 md:scale-125">
+            <img
+              src={logo}
+              alt="Brainify AI logo"
+              className="w-[200px] md:w-[300px] lg:w-[380px] object-contain anim-float"
+              style={{ mixBlendMode: "multiply" }}
+            />
           </div>
         </div>
 
@@ -68,10 +80,10 @@ const HeroSection = () => {
         {/* Headline */}
         <h1 className="font-heading text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.15] tracking-tight max-w-[800px] mx-auto mb-8 fade-up">
           <span className="text-foreground">Turn </span>
-          <span className="gradient-text animate-shimmer" style={{ backgroundImage: 'linear-gradient(90deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)' }}>2 hours of studying</span>
+          <span className="gradient-text animate-shimmer" style={{ backgroundImage: 'linear-gradient(120deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)' }}>2 hours of studying</span>
           <br />
           <span className="text-foreground">into </span>
-          <span className="gradient-text animate-shimmer" style={{ backgroundImage: 'linear-gradient(90deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)', animationDelay: '0.5s' }}>10 minutes.</span>
+          <span className="gradient-text animate-shimmer" style={{ backgroundImage: 'linear-gradient(120deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)', animationDelay: '0.5s' }}>10 minutes.</span>
         </h1>
 
         {/* Description */}
@@ -80,14 +92,15 @@ const HeroSection = () => {
         </p>
 
         {/* CTAs */}
-        <div className="flex gap-5 justify-center flex-wrap mb-6 fade-up">
-          <a href="#download" className="btn-gradient animate-cta-pulse text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-105">
-            ⬇️ Download Free
+        <div className="flex gap-5 justify-center flex-wrap mb-3 fade-up">
+          <a href="#download" className="btn-gradient animate-cta-pulse text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-[1.02] hover:brightness-110">
+            ⬇️ Download now
           </a>
-          <a href="#how" className="btn-ghost text-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-105">
+          <a href="#how" className="btn-ghost text-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-[1.02]">
             See how it works
           </a>
         </div>
+        <p className="text-dim text-xs mb-6 fade-up">No account required · 4.2 MB · Uninstall in one click</p>
 
         <p className="text-dim text-sm mb-10 fade-up">Windows available now · macOS & Linux coming soon · Mobile coming later</p>
 
@@ -118,7 +131,7 @@ const HeroSection = () => {
         </div>
 
         {/* Student counter */}
-        <div className="flex items-center justify-center gap-3 text-muted-foreground text-sm fade-up">
+        <div className="flex items-center justify-center gap-3 text-muted-foreground text-sm fade-up mb-4">
           <div className="flex">
             {[
               "bg-gradient-to-br from-primary to-accent",
@@ -137,10 +150,29 @@ const HeroSection = () => {
           </div>
           <span>
             <span className="font-heading font-bold text-foreground tabular-nums">
-              {counter.count.toLocaleString()}
+              {(counter.count + liveExtra).toLocaleString()}
             </span>
             {" "}students already studying smarter
           </span>
+        </div>
+        <p className="text-dim text-xs fade-up mb-10">3 students joined in the last hour</p>
+
+        {/* Mini TryIt input */}
+        <div className="max-w-xl mx-auto fade-up">
+          <div className="bg-surface border border-border rounded-xl p-4 relative">
+            <textarea
+              placeholder="Paste any notes here for a free preview..."
+              className="w-full min-h-[80px] bg-transparent text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none"
+              onClick={scrollToTryIt}
+              readOnly
+            />
+            <button
+              onClick={scrollToTryIt}
+              className="absolute bottom-4 right-4 bg-primary/20 border border-primary/30 text-electric px-4 py-2 rounded-lg text-xs font-medium hover:bg-primary/30 transition-all"
+            >
+              Generate summary →
+            </button>
+          </div>
         </div>
       </div>
     </section>

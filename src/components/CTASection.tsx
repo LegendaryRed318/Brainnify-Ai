@@ -17,10 +17,11 @@ const CTASection = () => {
         <p className="relative text-muted-foreground text-lg font-light max-w-xl mx-auto leading-relaxed mb-12 text-center fade-up fade-up-d2">
           Download free and start saving hours every week. No sign-up, no credit card.
         </p>
-        <a href="#download" className="relative btn-gradient text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all fade-up fade-up-d3 hover:scale-105">
-          ⬇️ Download Brainify AI — Free
+        <a href="#download" className="relative btn-gradient text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all fade-up fade-up-d3 hover:scale-[1.02] hover:brightness-110">
+          ⬇️ Download now — it's free
         </a>
-        <p className="relative text-dim text-sm mt-5 fade-up fade-up-d4">Windows available now · macOS & Linux coming soon · Mobile coming later</p>
+        <p className="relative text-dim text-xs mt-3 fade-up fade-up-d4">No account required · 4.2 MB · Uninstall in one click</p>
+        <p className="relative text-dim text-sm mt-5 fade-up fade-up-d4">Windows available now · macOS & Linux coming soon</p>
       </div>
     </section>
   );

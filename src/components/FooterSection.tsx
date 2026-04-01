@@ -4,8 +4,8 @@ import { BrainifyLogo } from "@/components/BrainifyLogo";
 const FooterSection = () => {
   return (
     <footer className="relative z-[1] border-t border-border">
-      {/* Gradient top line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
+      {/* Animated gradient line */}
+      <div className="h-[2px] bg-gradient-to-r from-transparent via-primary to-accent bg-[length:200%_100%] animate-shimmer" />
 
       <div className="py-14 px-[5%]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
