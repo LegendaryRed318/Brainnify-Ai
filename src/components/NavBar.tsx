@@ -16,9 +16,7 @@ const NavBar = () => {
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -28,9 +26,7 @@ const NavBar = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(`#${entry.target.id}`);
-          }
+          if (entry.isIntersecting) setActiveSection(`#${entry.target.id}`);
         });
       },
       { threshold: 0.3, rootMargin: "-80px 0px -50% 0px" }
@@ -42,7 +38,7 @@ const NavBar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-[100] px-[5%] h-[72px] flex items-center justify-between glass-nav border-b transition-all duration-300 ${
-        scrolled ? "border-primary/15 shadow-[0_4px_30px_rgba(0,0,0,0.3)]" : "border-border"
+        scrolled ? "border-primary/15 shadow-[0_4px_30px_rgba(0,0,0,0.3)] backdrop-blur-xl" : "border-border"
       }`}
       style={{ animation: "slide-down-in 0.5s ease-out both" }}
     >
@@ -56,24 +52,21 @@ const NavBar = () => {
           <a
             key={link.href}
             href={link.href}
-            className={`no-underline text-sm font-medium transition-colors ${
+            className={`relative no-underline text-sm font-medium transition-colors group ${
               activeSection === link.href ? "text-electric" : "text-muted-foreground hover:text-foreground"
             }`}
           >
             {link.label}
+            <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-primary rounded-full transition-all duration-300 group-hover:w-full" />
           </a>
         ))}
-        <a href="#download" className="btn-gradient animate-cta-pulse text-primary-foreground px-6 py-2.5 rounded-xl font-semibold text-sm transition-all no-underline">
-          Try Free →
+        <a href="#download" className="btn-gradient animate-cta-pulse text-primary-foreground px-6 py-2.5 rounded-xl font-semibold text-sm transition-all no-underline hover:scale-[1.02] hover:brightness-110">
+          Start studying →
         </a>
       </div>
 
       {/* Hamburger */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="lg:hidden flex flex-col gap-1.5 p-2"
-        aria-label="Toggle navigation"
-      >
+      <button onClick={() => setOpen(!open)} className="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle navigation">
         <span className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`} />
         <span className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${open ? "opacity-0" : ""}`} />
         <span className={`block w-6 h-0.5 bg-foreground transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`} />
@@ -95,7 +88,7 @@ const NavBar = () => {
             </a>
           ))}
           <a href="#download" onClick={() => setOpen(false)} className="btn-gradient text-primary-foreground px-6 py-3 rounded-xl font-semibold text-sm text-center no-underline mt-2">
-            Try Free →
+            Start studying →
           </a>
         </div>
       )}

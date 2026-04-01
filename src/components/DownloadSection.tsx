@@ -28,13 +28,13 @@ const DownloadSection = () => {
             ✦ Download
           </div>
           <h2 className="relative font-heading text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight tracking-tight mb-5">
-            Get Brainify AI
+            Start studying smarter today
           </h2>
           <p className="relative text-muted-foreground text-base font-light max-w-lg mx-auto leading-relaxed mb-12">
             Free to download and use. Windows available now.
           </p>
 
-          <div className="relative flex justify-center gap-5 flex-wrap mb-8">
+          <div className="relative flex justify-center gap-5 flex-wrap mb-4">
             {platforms.map((dl) => (
               <button
                 key={dl.label}
@@ -42,7 +42,7 @@ const DownloadSection = () => {
                 disabled={!dl.available}
                 className={`flex items-center gap-3 rounded-xl px-8 py-4 min-w-[200px] transition-all text-left ${
                   dl.primary
-                    ? "btn-gradient text-primary-foreground cursor-pointer hover:scale-105"
+                    ? "btn-gradient text-primary-foreground cursor-pointer hover:scale-[1.02] hover:brightness-110"
                     : "bg-foreground/[0.03] border border-foreground/[0.08] opacity-50 cursor-default"
                 }`}
               >
@@ -57,7 +57,8 @@ const DownloadSection = () => {
             ))}
           </div>
 
-          <p className="relative text-dim text-xs">Current version: v1.0.0 · Free · 45MB</p>
+          <p className="relative text-dim text-xs mb-4">No account required · 4.2 MB · Uninstall in one click</p>
+          <p className="relative text-dim text-xs">Current version: v1.0.0 · Free</p>
         </div>
       </div>
     </section>
