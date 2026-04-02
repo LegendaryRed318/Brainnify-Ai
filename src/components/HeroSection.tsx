@@ -59,12 +59,11 @@ const HeroSection = () => {
       <div className="max-w-[1000px] mx-auto text-center relative" style={{ zIndex: 1 }}>
         {/* Logo */}
         <div className="fade-up mb-10 flex items-center justify-center">
-          <div className="drop-shadow-[0_0_50px_rgba(139,92,246,0.4)] scale-110 md:scale-125">
+          <div className="scale-110 md:scale-125" style={{ filter: "drop-shadow(0 0 50px rgba(139,92,246,0.4))" }}>
             <img
               src={logo}
               alt="Brainify AI logo"
               className="w-[200px] md:w-[300px] lg:w-[380px] object-contain anim-float"
-              style={{ mixBlendMode: "multiply" }}
             />
           </div>
         </div>

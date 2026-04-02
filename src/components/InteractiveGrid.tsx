@@ -1,31 +1,49 @@
 import { useEffect, useRef, useCallback } from "react";
 
+const isTouchDevice = () => {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+};
+
 const InteractiveGrid = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animRef = useRef<number>(0);
+  const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
+
+  // Return nothing on touch/mobile devices
+  if (isTouchDevice()) return null;
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    const onTouch = (e: TouchEvent) => {
-      const t = e.touches[0];
-      if (t) mouseRef.current = { x: t.clientX, y: t.clientY };
     };
     const onLeave = () => {
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
     window.addEventListener("mousemove", onMove);
-    window.addEventListener("touchmove", onTouch, { passive: true });
     window.addEventListener("mouseleave", onLeave);
 
     return () => {
       window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("touchmove", onTouch);
       window.removeEventListener("mouseleave", onLeave);
     };
+  }, []);
+
+  // Resize only on window resize, not every frame
+  useEffect(() => {
+    const resize = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      sizeRef.current = { w: rect.width, h: rect.height, dpr };
+    };
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
 
   const draw = useCallback(() => {
@@ -34,12 +52,9 @@ const InteractiveGrid = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, rect.width, rect.height);
+    const { w, h, dpr } = sizeRef.current;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
 
     const cellSize = 50;
     const mouse = mouseRef.current;
@@ -47,10 +62,10 @@ const InteractiveGrid = () => {
     const mx = mouse.x - canvasRect.left;
     const my = mouse.y - canvasRect.top;
     const glowRadius = 280;
-    const maxLift = 14;
+    const maxLift = 10;
 
-    const cols = Math.ceil(rect.width / cellSize) + 1;
-    const rows = Math.ceil(rect.height / cellSize) + 1;
+    const cols = Math.ceil(w / cellSize) + 1;
+    const rows = Math.ceil(h / cellSize) + 1;
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
@@ -64,7 +79,6 @@ const InteractiveGrid = () => {
         const dist = Math.sqrt(dx * dx + dy * dy);
         const proximity = Math.max(0, 1 - dist / glowRadius);
 
-        // Lift effect — cells move toward cursor
         const lift = proximity * maxLift;
         const angle = Math.atan2(dy, dx);
         const offsetX = -Math.cos(angle) * lift * 0.3;
@@ -73,8 +87,8 @@ const InteractiveGrid = () => {
         const drawX = x + offsetX;
         const drawY = y + offsetY;
 
-        // Cell fill
-        const fillAlpha = 0.09 + proximity * 0.08;
+        // Cell fill — reduced intensity
+        const fillAlpha = 0.09 + proximity * 0.04;
         const r = Math.round(139 * proximity);
         const g = Math.round(92 * proximity);
         const b = Math.round(246 * proximity);
@@ -93,13 +107,13 @@ const InteractiveGrid = () => {
       }
     }
 
-    // Radial glow at cursor
+    // Radial glow at cursor — reduced intensity
     if (mx > -500 && my > -500) {
       const gradient = ctx.createRadialGradient(mx, my, 0, mx, my, glowRadius);
-      gradient.addColorStop(0, "rgba(139, 92, 246, 0.1)");
+      gradient.addColorStop(0, "rgba(139, 92, 246, 0.07)");
       gradient.addColorStop(1, "transparent");
       ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, rect.width, rect.height);
+      ctx.fillRect(0, 0, w, h);
     }
 
     animRef.current = requestAnimationFrame(draw);
