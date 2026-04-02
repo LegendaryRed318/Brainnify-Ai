@@ -9,10 +9,10 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
 
   useEffect(() => {
     const wordTimers = words.map((_, i) =>
-      setTimeout(() => setVisibleWords(i + 1), 500 + i * 60)
+      setTimeout(() => setVisibleWords(i + 1), 300 + i * 120)
     );
     const logoTimer = setTimeout(() => setPhase("logo"), 2000);
-    const exitTimer = setTimeout(() => setPhase("exit"), 3500);
+    const exitTimer = setTimeout(() => setPhase("exit"), 4000);
     const doneTimer = setTimeout(() => {
       setPhase("done");
       onComplete();
@@ -30,7 +30,7 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background transition-opacity duration-700 ${
+      className={`fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background transition-opacity duration-1000 ${
         phase === "exit" ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
@@ -52,7 +52,7 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
       </div>
 
       <div
-        className="transition-all duration-500"
+        className="transition-all duration-700"
         style={{
           opacity: phase === "logo" || phase === "exit" ? 1 : 0,
           transform: phase === "logo" || phase === "exit" ? "translateY(0) scale(1)" : "translateY(10px) scale(0.95)",
@@ -65,6 +65,18 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
             className="w-[120px] h-[120px] object-contain"
           />
         </div>
+      </div>
+
+      <div
+        className="mt-6 transition-all duration-500"
+        style={{
+          opacity: phase === "logo" || phase === "exit" ? 1 : 0,
+          transform: phase === "logo" || phase === "exit" ? "translateY(0)" : "translateY(8px)",
+        }}
+      >
+        <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground font-medium">
+          Brainnify AI
+        </span>
       </div>
     </div>
   );

@@ -1,10 +1,15 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 
+const CELL = 60;
+const GLOW_RADIUS = 250;
+const MAX_LIFT = 8;
+
 const InteractiveGrid = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const mouseRef = useRef({ x: -9999, y: -9999 });
   const animRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
+  const lastFrameRef = useRef(0);
   const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
@@ -17,9 +22,9 @@ const InteractiveGrid = () => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
     const onLeave = () => {
-      mouseRef.current = { x: -1000, y: -1000 };
+      mouseRef.current = { x: -9999, y: -9999 };
     };
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("mouseleave", onLeave);
     return () => {
       window.removeEventListener("mousemove", onMove);
@@ -32,81 +37,86 @@ const InteractiveGrid = () => {
     const resize = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
       sizeRef.current = { w: rect.width, h: rect.height, dpr };
     };
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", resize, { passive: true });
     return () => window.removeEventListener("resize", resize);
   }, [isTouch]);
 
-  const draw = useCallback(() => {
+  const draw = useCallback((timestamp: number) => {
+    if (timestamp - lastFrameRef.current < 33) {
+      animRef.current = requestAnimationFrame(draw);
+      return;
+    }
+    lastFrameRef.current = timestamp;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     const { w, h, dpr } = sizeRef.current;
+    if (w === 0 || h === 0) {
+      animRef.current = requestAnimationFrame(draw);
+      return;
+    }
+
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
 
-    const cellSize = 50;
-    const mouse = mouseRef.current;
-    const canvasRect = canvas.getBoundingClientRect();
-    const mx = mouse.x - canvasRect.left;
-    const my = mouse.y - canvasRect.top;
-    const glowRadius = 280;
-    const maxLift = 10;
+    const { x: mx, y: my } = mouseRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const lx = mx - rect.left;
+    const ly = my - rect.top;
+    const hasActiveMouse = lx > -1000 && ly > -1000;
 
-    const cols = Math.ceil(w / cellSize) + 1;
-    const rows = Math.ceil(h / cellSize) + 1;
+    const cols = Math.ceil(w / CELL) + 1;
+    const rows = Math.ceil(h / CELL) + 1;
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
-        const x = col * cellSize;
-        const y = row * cellSize;
-        const centerX = x + cellSize / 2;
-        const centerY = y + cellSize / 2;
+        const baseX = col * CELL;
+        const baseY = row * CELL;
 
-        const dx = centerX - mx;
-        const dy = centerY - my;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const proximity = Math.max(0, 1 - dist / glowRadius);
+        let proximity = 0;
+        let offsetY = 0;
 
-        const lift = proximity * maxLift;
-        const angle = Math.atan2(dy, dx);
-        const offsetX = -Math.cos(angle) * lift * 0.3;
-        const offsetY = -Math.sin(angle) * lift;
+        if (hasActiveMouse) {
+          const cx = baseX + CELL / 2;
+          const cy = baseY + CELL / 2;
+          const dist = Math.sqrt((cx - lx) ** 2 + (cy - ly) ** 2);
+          proximity = Math.max(0, 1 - dist / GLOW_RADIUS);
+          offsetY = -(proximity * MAX_LIFT);
+        }
 
-        const drawX = x + offsetX;
-        const drawY = y + offsetY;
+        const drawX = baseX;
+        const drawY = baseY + offsetY;
 
-        const fillAlpha = 0.09 + proximity * 0.04;
-        const r = Math.round(139 * proximity);
-        const g = Math.round(92 * proximity);
-        const b = Math.round(246 * proximity);
-        ctx.fillStyle = proximity > 0.01
-          ? `rgba(${r}, ${g}, ${b}, ${fillAlpha})`
-          : `rgba(255, 255, 255, ${fillAlpha})`;
-        ctx.fillRect(drawX + 1, drawY + 1, cellSize - 2, cellSize - 2);
+        if (proximity > 0.05) {
+          ctx.fillStyle = `rgba(139, 92, 246, ${proximity * 0.05})`;
+          ctx.fillRect(drawX + 1, drawY + 1, CELL - 2, CELL - 2);
+        }
 
-        const borderAlpha = 0.09 + proximity * 0.18;
-        ctx.strokeStyle = proximity > 0.01
-          ? `rgba(139, 92, 246, ${borderAlpha})`
-          : `rgba(255, 255, 255, ${borderAlpha})`;
-        ctx.lineWidth = proximity > 0.3 ? 1.2 : 0.8;
-        ctx.strokeRect(drawX, drawY, cellSize, cellSize);
+        const borderAlpha = 0.07 + proximity * 0.12;
+        ctx.strokeStyle =
+          proximity > 0.05
+            ? `rgba(139, 92, 246, ${borderAlpha})`
+            : `rgba(255, 255, 255, ${borderAlpha})`;
+        ctx.lineWidth = 0.8;
+        ctx.strokeRect(drawX, drawY, CELL, CELL);
       }
     }
 
-    if (mx > -500 && my > -500) {
-      const gradient = ctx.createRadialGradient(mx, my, 0, mx, my, glowRadius);
-      gradient.addColorStop(0, "rgba(139, 92, 246, 0.07)");
-      gradient.addColorStop(1, "transparent");
-      ctx.fillStyle = gradient;
+    if (hasActiveMouse) {
+      const grad = ctx.createRadialGradient(lx, ly, 0, lx, ly, GLOW_RADIUS);
+      grad.addColorStop(0, "rgba(139, 92, 246, 0.06)");
+      grad.addColorStop(1, "transparent");
+      ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, h);
     }
 
