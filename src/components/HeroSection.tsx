@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import logo from "@/assets/logo-brain-transparent.png";
-import InteractiveGrid from "@/components/InteractiveGrid";
+
 
 const useCountUp = (target: number, duration: number = 2000) => {
   const [count, setCount] = useState(0);
