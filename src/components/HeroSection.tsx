@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import logo from "@/assets/logo-brain-transparent.png";
-import InteractiveGrid from "@/components/InteractiveGrid";
+
 
 const useCountUp = (target: number, duration: number = 2000) => {
   const [count, setCount] = useState(0);
@@ -55,7 +55,7 @@ const HeroSection = () => {
 
   return (
     <section id="hero" className="relative pt-32 pb-24 px-[5%]" ref={ref}>
-      <InteractiveGrid />
+      
       <div className="max-w-[1000px] mx-auto text-center relative" style={{ zIndex: 1 }}>
         {/* Logo */}
         <div className="fade-up mb-10 flex items-center justify-center">

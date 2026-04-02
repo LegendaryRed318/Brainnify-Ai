@@ -10,17 +10,17 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
   useEffect(() => {
     // Stagger words
     const wordTimers = words.map((_, i) =>
-      setTimeout(() => setVisibleWords(i + 1), 200 + i * 60)
+      setTimeout(() => setVisibleWords(i + 1), 500 + i * 60)
     );
     // Show logo
-    const logoTimer = setTimeout(() => setPhase("logo"), 1000);
+    const logoTimer = setTimeout(() => setPhase("logo"), 2000);
     // Exit
-    const exitTimer = setTimeout(() => setPhase("exit"), 1600);
+    const exitTimer = setTimeout(() => setPhase("exit"), 3500);
     // Done
     const doneTimer = setTimeout(() => {
       setPhase("done");
       onComplete();
-    }, 2500);
+    }, 5000);
 
     return () => {
       wordTimers.forEach(clearTimeout);
