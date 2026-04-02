@@ -34,12 +34,17 @@ const Index = () => {
     <>
       <CinematicIntro onComplete={handleIntroComplete} />
       <div
+        className="relative"
         style={{
           opacity: introComplete ? 1 : 0,
           transform: introComplete ? "translateY(0)" : "translateY(30px)",
           transition: "opacity 0.7s ease-out, transform 0.7s ease-out",
         }}
       >
+        <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+          <InteractiveGrid />
+        </div>
+        <div style={{ position: "relative", zIndex: 1 }}>
         <ScrollProgress />
         <BackgroundOrbs />
         <NavBar />
