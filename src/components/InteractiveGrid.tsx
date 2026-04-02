@@ -1,37 +1,34 @@
-import { useEffect, useRef, useCallback } from "react";
-
-const isTouchDevice = () => {
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-};
+import { useEffect, useRef, useCallback, useState } from "react";
 
 const InteractiveGrid = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
-
-  // Return nothing on touch/mobile devices
-  if (isTouchDevice()) return null;
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
+
+  useEffect(() => {
+    if (isTouch) return;
     const onMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
     const onLeave = () => {
       mouseRef.current = { x: -1000, y: -1000 };
     };
-
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseleave", onLeave);
-
     return () => {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseleave", onLeave);
     };
-  }, []);
+  }, [isTouch]);
 
-  // Resize only on window resize, not every frame
   useEffect(() => {
+    if (isTouch) return;
     const resize = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -44,7 +41,7 @@ const InteractiveGrid = () => {
     resize();
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
-  }, []);
+  }, [isTouch]);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -87,7 +84,6 @@ const InteractiveGrid = () => {
         const drawX = x + offsetX;
         const drawY = y + offsetY;
 
-        // Cell fill — reduced intensity
         const fillAlpha = 0.09 + proximity * 0.04;
         const r = Math.round(139 * proximity);
         const g = Math.round(92 * proximity);
@@ -97,7 +93,6 @@ const InteractiveGrid = () => {
           : `rgba(255, 255, 255, ${fillAlpha})`;
         ctx.fillRect(drawX + 1, drawY + 1, cellSize - 2, cellSize - 2);
 
-        // Cell border
         const borderAlpha = 0.09 + proximity * 0.18;
         ctx.strokeStyle = proximity > 0.01
           ? `rgba(139, 92, 246, ${borderAlpha})`
@@ -107,7 +102,6 @@ const InteractiveGrid = () => {
       }
     }
 
-    // Radial glow at cursor — reduced intensity
     if (mx > -500 && my > -500) {
       const gradient = ctx.createRadialGradient(mx, my, 0, mx, my, glowRadius);
       gradient.addColorStop(0, "rgba(139, 92, 246, 0.07)");
@@ -120,9 +114,12 @@ const InteractiveGrid = () => {
   }, []);
 
   useEffect(() => {
+    if (isTouch) return;
     animRef.current = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(animRef.current);
-  }, [draw]);
+  }, [draw, isTouch]);
+
+  if (isTouch) return null;
 
   return (
     <canvas
