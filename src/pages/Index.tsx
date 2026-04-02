@@ -3,6 +3,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import NavBar from "@/components/NavBar";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
 import CinematicIntro from "@/components/CinematicIntro";
+import InteractiveGrid from "@/components/InteractiveGrid";
 import HeroSection from "@/components/HeroSection";
 import AppPreview from "@/components/AppPreview";
 import DemoSection from "@/components/DemoSection";
