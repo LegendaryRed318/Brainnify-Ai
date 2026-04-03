@@ -8,11 +8,18 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
   const [visibleWords, setVisibleWords] = useState(0);
 
   useEffect(() => {
+    // Stagger words 500ms apart starting at 300ms
     const wordTimers = words.map((_, i) =>
       setTimeout(() => setVisibleWords(i + 1), 300 + i * 120)
     );
+
+    // Logo fades in at 2000ms
     const logoTimer = setTimeout(() => setPhase("logo"), 2000);
+
+    // Start exit fade at 4000ms (fade takes 1000ms so done at 5000ms)
     const exitTimer = setTimeout(() => setPhase("exit"), 4000);
+
+    // Fully done at 5000ms
     const doneTimer = setTimeout(() => {
       setPhase("done");
       onComplete();
@@ -34,15 +41,19 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
         phase === "exit" ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
-      <div className="px-6 text-center w-full max-w-[90vw] mx-auto mb-8">
-        <p className="font-heading text-[clamp(1.2rem,5vw,2.5rem)] font-bold leading-tight tracking-tight text-foreground whitespace-normal break-words">
+      {/* Tagline */}
+      <div className="px-8 text-center w-full max-w-[90vw] mx-auto mb-10">
+        <p className="font-heading font-bold leading-tight tracking-tight text-foreground whitespace-normal break-words"
+          style={{ fontSize: "clamp(1.4rem, 5vw, 2.8rem)" }}
+        >
           {words.map((word, i) => (
             <span
               key={i}
-              className="inline-block mr-[0.3em] transition-all duration-500"
+              className="inline-block mr-[0.3em]"
               style={{
                 opacity: i < visibleWords ? 1 : 0,
-                transform: i < visibleWords ? "translateY(0)" : "translateY(20px)",
+                transform: i < visibleWords ? "translateY(0)" : "translateY(24px)",
+                transition: "opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)",
               }}
             >
               {word}
@@ -51,32 +62,39 @@ const CinematicIntro = ({ onComplete }: { onComplete: () => void }) => {
         </p>
       </div>
 
+      {/* Logo */}
       <div
-        className="transition-all duration-700"
         style={{
           opacity: phase === "logo" || phase === "exit" ? 1 : 0,
-          transform: phase === "logo" || phase === "exit" ? "translateY(0) scale(1)" : "translateY(10px) scale(0.95)",
+          transform: phase === "logo" || phase === "exit"
+            ? "translateY(0) scale(1)"
+            : "translateY(16px) scale(0.92)",
+          transition: "opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1)",
+          filter: "drop-shadow(0 0 60px rgba(139,92,246,0.7))",
         }}
       >
-        <div style={{ filter: "drop-shadow(0 0 60px rgba(139,92,246,0.6))" }}>
-          <img
-            src={logo}
-            alt="Brainify AI"
-            className="w-[120px] h-[120px] object-contain"
-          />
-        </div>
+        <img
+          src={logo}
+          alt="Brainnify AI"
+          style={{
+            width: "clamp(100px, 20vw, 160px)",
+            height: "clamp(100px, 20vw, 160px)",
+            objectFit: "contain",
+            // No mixBlendMode - transparent PNG doesn't need it
+          }}
+        />
       </div>
 
+      {/* Subtle bottom brand line */}
       <div
-        className="mt-6 transition-all duration-500"
         style={{
-          opacity: phase === "logo" || phase === "exit" ? 1 : 0,
-          transform: phase === "logo" || phase === "exit" ? "translateY(0)" : "translateY(8px)",
+          opacity: phase === "logo" || phase === "exit" ? 0.4 : 0,
+          transition: "opacity 0.7s ease",
+          marginTop: "2rem",
         }}
+        className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground"
       >
-        <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground font-medium">
-          Brainnify AI
-        </span>
+        Brainnify AI
       </div>
     </div>
   );

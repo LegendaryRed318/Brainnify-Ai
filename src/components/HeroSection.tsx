@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
 import logo from "@/assets/logo-brain-transparent.png";
-
 
 const useCountUp = (target: number, duration: number = 2000) => {
   const [count, setCount] = useState(0);
@@ -22,26 +22,29 @@ const useCountUp = (target: number, duration: number = 2000) => {
   return { count, start: () => setStarted(true) };
 };
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
 const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
   const counter = useCountUp(12847, 2500);
   const [liveExtra, setLiveExtra] = useState(0);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("visible");
-          counter.start();
-        }
-      }),
-      { threshold: 0.1 }
-    );
-    ref.current?.querySelectorAll(".fade-up").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+    if (isInView && !started) {
+      setStarted(true);
+      counter.start();
+    }
+  }, [isInView]);
 
-  // Live ticking effect after count-up completes
   useEffect(() => {
     const interval = setInterval(() => {
       setLiveExtra((prev) => prev + Math.floor(Math.random() * 3) + 1);
@@ -54,57 +57,116 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="hero" className="relative pt-32 pb-24 px-[5%]" ref={ref}>
-      
-      <div className="max-w-[1000px] mx-auto text-center relative" style={{ zIndex: 1 }}>
+    <section id="hero" className="relative pt-32 pb-24 px-[5%] overflow-hidden" ref={ref}>
+
+      {/* Animated background orbs */}
+      <motion.div
+        className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)" }}
+        animate={{ scale: [1, 1.08, 1], opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute top-[200px] left-[10%] w-[300px] h-[300px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 70%)" }}
+        animate={{ x: [0, 20, 0], y: [0, -20, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute top-[100px] right-[5%] w-[250px] h-[250px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)" }}
+        animate={{ x: [0, -15, 0], y: [0, 25, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+      />
+
+      <motion.div
+        className="max-w-[1000px] mx-auto text-center relative"
+        style={{ zIndex: 1 }}
+        variants={stagger}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+      >
         {/* Logo */}
-        <div className="fade-up mb-10 flex items-center justify-center">
-          <div className="scale-110 md:scale-125" style={{ filter: "drop-shadow(0 0 50px rgba(139,92,246,0.4))" }}>
+        <motion.div className="mb-10 flex items-center justify-center" variants={fadeUp} transition={{ duration: 0.7, ease: "easeOut" }}>
+          <motion.div
+            className="scale-110 md:scale-125"
+            style={{ filter: "drop-shadow(0 0 50px rgba(139,92,246,0.4))" }}
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
             <img
               src={logo}
               alt="Brainify AI logo"
-              className="w-[200px] md:w-[300px] lg:w-[380px] object-contain anim-float"
+              className="w-[200px] md:w-[300px] lg:w-[380px] object-contain"
             />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Badge */}
-        <div className="fade-up mb-8">
+        <motion.div className="mb-8" variants={fadeUp} transition={{ duration: 0.6 }}>
           <div className="inline-flex items-center gap-2 bg-primary/15 border border-primary/35 rounded-full px-5 py-2 text-xs font-medium text-electric tracking-wide">
             <span className="w-1.5 h-1.5 bg-electric rounded-full animate-pulse-dot" />
             Desktop App — Free to Download
           </div>
-        </div>
+        </motion.div>
 
         {/* Headline */}
-        <h1 className="font-heading text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.15] tracking-tight max-w-[800px] mx-auto mb-8 fade-up">
+        <motion.h1
+          className="font-heading text-[clamp(2rem,4vw,3.2rem)] font-bold leading-[1.15] tracking-tight max-w-[800px] mx-auto mb-8"
+          variants={fadeUp}
+          transition={{ duration: 0.7 }}
+        >
           <span className="text-foreground">Turn </span>
-          <span className="gradient-text animate-shimmer" style={{ backgroundImage: 'linear-gradient(120deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)' }}>2 hours of studying</span>
+          <span className="gradient-text animate-shimmer" style={{ backgroundImage: "linear-gradient(120deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)" }}>
+            2 hours of studying
+          </span>
           <br />
           <span className="text-foreground">into </span>
-          <span className="gradient-text animate-shimmer" style={{ backgroundImage: 'linear-gradient(120deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)', animationDelay: '0.5s' }}>10 minutes.</span>
-        </h1>
+          <span className="gradient-text animate-shimmer" style={{ backgroundImage: "linear-gradient(120deg, #fff 0%, hsl(275 96% 75%) 50%, #fff 100%)", animationDelay: "0.5s" }}>
+            10 minutes.
+          </span>
+        </motion.h1>
 
         {/* Description */}
-        <p className="text-muted-foreground text-[clamp(1rem,1.8vw,1.15rem)] max-w-xl mx-auto mb-14 font-light leading-relaxed fade-up">
+        <motion.p
+          className="text-muted-foreground text-[clamp(1rem,1.8vw,1.15rem)] max-w-xl mx-auto mb-14 font-light leading-relaxed"
+          variants={fadeUp}
+          transition={{ duration: 0.6 }}
+        >
           Paste your notes, upload a PDF, or drop in a YouTube transcript. Brainify AI instantly creates summaries, flashcards, quizzes and simple explanations.
-        </p>
+        </motion.p>
 
         {/* CTAs */}
-        <div className="flex gap-5 justify-center flex-wrap mb-3 fade-up">
-          <a href="#download" className="btn-gradient animate-cta-pulse text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-[1.02] hover:brightness-110">
+        <motion.div className="flex gap-5 justify-center flex-wrap mb-3" variants={fadeUp} transition={{ duration: 0.6 }}>
+          <motion.a
+            href="#download"
+            className="btn-gradient animate-cta-pulse text-primary-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2"
+            whileHover={{ scale: 1.04, filter: "brightness(1.15)" }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          >
             ⬇️ Download now
-          </a>
-          <a href="#how" className="btn-ghost text-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2 transition-all hover:scale-[1.02]">
+          </motion.a>
+          <motion.a
+            href="#how"
+            className="btn-ghost text-foreground px-10 py-4 rounded-xl no-underline font-semibold text-lg inline-flex items-center gap-2"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          >
             See how it works
-          </a>
-        </div>
-        <p className="text-dim text-xs mb-6 fade-up">No account required · 4.2 MB · Uninstall in one click</p>
+          </motion.a>
+        </motion.div>
 
-        <p className="text-dim text-sm mb-10 fade-up">Windows available now · macOS & Linux coming soon · Mobile coming later</p>
+        <motion.p className="text-dim text-xs mb-6" variants={fadeUp}>
+          No account required · 4.2 MB · Uninstall in one click
+        </motion.p>
+        <motion.p className="text-dim text-sm mb-10" variants={fadeUp}>
+          Windows available now · macOS &amp; Linux coming soon · Mobile coming later
+        </motion.p>
 
         {/* Platform badges */}
-        <div className="flex justify-center gap-3 flex-wrap mb-8 fade-up">
+        <motion.div className="flex justify-center gap-3 flex-wrap mb-8" variants={fadeUp}>
           <div className="flex items-center gap-1.5 bg-primary/10 border border-primary/25 rounded-full px-4 py-1.5 text-xs font-medium text-electric">
             🪟 Windows 10/11
           </div>
@@ -114,10 +176,10 @@ const HeroSection = () => {
           <div className="flex items-center gap-1.5 bg-foreground/[0.04] border border-border rounded-full px-4 py-1.5 text-xs text-muted-foreground">
             🐧 Linux <span className="bg-foreground/10 rounded px-1.5 py-0.5 text-[0.6rem] ml-1">Soon</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Trust badges */}
-        <div className="flex justify-center gap-3 flex-wrap mb-10 fade-up">
+        <motion.div className="flex justify-center gap-3 flex-wrap mb-10" variants={fadeUp}>
           {[
             { icon: "🔒", label: "No account needed" },
             { icon: "⚡", label: "Works offline" },
@@ -127,10 +189,10 @@ const HeroSection = () => {
               {badge.icon} {badge.label}
             </div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Student counter */}
-        <div className="flex items-center justify-center gap-3 text-muted-foreground text-sm fade-up mb-4">
+        <motion.div className="flex items-center justify-center gap-3 text-muted-foreground text-sm mb-4" variants={fadeUp}>
           <div className="flex">
             {[
               "bg-gradient-to-br from-primary to-accent",
@@ -150,14 +212,22 @@ const HeroSection = () => {
           <span>
             <span className="font-heading font-bold text-foreground tabular-nums">
               {(counter.count + liveExtra).toLocaleString()}
-            </span>
-            {" "}students already studying smarter
+            </span>{" "}
+            students already studying smarter
           </span>
-        </div>
-        <p className="text-dim text-xs fade-up mb-10">3 students joined in the last hour</p>
+        </motion.div>
+
+        <motion.p className="text-dim text-xs mb-10" variants={fadeUp}>
+          3 students joined in the last hour
+        </motion.p>
 
         {/* Mini TryIt input */}
-        <div className="max-w-xl mx-auto fade-up">
+        <motion.div
+          className="max-w-xl mx-auto"
+          variants={fadeUp}
+          transition={{ duration: 0.7 }}
+          whileHover={{ scale: 1.01 }}
+        >
           <div className="bg-surface border border-border rounded-xl p-4 relative">
             <textarea
               placeholder="Paste any notes here for a free preview..."
@@ -172,8 +242,8 @@ const HeroSection = () => {
               Generate summary →
             </button>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

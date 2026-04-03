@@ -1,8 +1,13 @@
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 const CELL = 60;
 const GLOW_RADIUS = 250;
 const MAX_LIFT = 8;
+
+// Check once at module level - no state needed
+const isTouchDevice =
+  typeof window !== "undefined" &&
+  ("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
 const InteractiveGrid = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -10,14 +15,11 @@ const InteractiveGrid = () => {
   const animRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
   const lastFrameRef = useRef(0);
-  const [isTouch, setIsTouch] = useState(false);
+
+  // Don't render anything on touch devices
+  if (isTouchDevice) return null;
 
   useEffect(() => {
-    setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
-  }, []);
-
-  useEffect(() => {
-    if (isTouch) return;
     const onMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -30,14 +32,13 @@ const InteractiveGrid = () => {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseleave", onLeave);
     };
-  }, [isTouch]);
+  }, []);
 
   useEffect(() => {
-    if (isTouch) return;
     const resize = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // cap at 2x
       const rect = canvas.getBoundingClientRect();
       canvas.width = Math.floor(rect.width * dpr);
       canvas.height = Math.floor(rect.height * dpr);
@@ -46,9 +47,10 @@ const InteractiveGrid = () => {
     resize();
     window.addEventListener("resize", resize, { passive: true });
     return () => window.removeEventListener("resize", resize);
-  }, [isTouch]);
+  }, []);
 
   const draw = useCallback((timestamp: number) => {
+    // Throttle to ~30fps for performance (every ~33ms)
     if (timestamp - lastFrameRef.current < 33) {
       animRef.current = requestAnimationFrame(draw);
       return;
@@ -73,6 +75,7 @@ const InteractiveGrid = () => {
     const rect = canvas.getBoundingClientRect();
     const lx = mx - rect.left;
     const ly = my - rect.top;
+
     const hasActiveMouse = lx > -1000 && ly > -1000;
 
     const cols = Math.ceil(w / CELL) + 1;
@@ -97,11 +100,13 @@ const InteractiveGrid = () => {
         const drawX = baseX;
         const drawY = baseY + offsetY;
 
+        // Cell fill - very subtle, only near cursor
         if (proximity > 0.05) {
           ctx.fillStyle = `rgba(139, 92, 246, ${proximity * 0.05})`;
           ctx.fillRect(drawX + 1, drawY + 1, CELL - 2, CELL - 2);
         }
 
+        // Cell border
         const borderAlpha = 0.07 + proximity * 0.12;
         ctx.strokeStyle =
           proximity > 0.05
@@ -112,6 +117,7 @@ const InteractiveGrid = () => {
       }
     }
 
+    // Soft radial glow at cursor - very subtle
     if (hasActiveMouse) {
       const grad = ctx.createRadialGradient(lx, ly, 0, lx, ly, GLOW_RADIUS);
       grad.addColorStop(0, "rgba(139, 92, 246, 0.06)");
@@ -124,12 +130,9 @@ const InteractiveGrid = () => {
   }, []);
 
   useEffect(() => {
-    if (isTouch) return;
     animRef.current = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(animRef.current);
-  }, [draw, isTouch]);
-
-  if (isTouch) return null;
+  }, [draw]);
 
   return (
     <canvas
