@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 
 const posts = [
@@ -24,11 +25,15 @@ const posts = [
   },
 ];
 
-const BlogSection = () => {
-  const ref = useInViewAnimation();
+const BlogSection = forwardRef<HTMLDivElement>((props, ref) => {
+  const animRef = useInViewAnimation();
 
   return (
-    <section className="relative z-[1] py-24" ref={ref}>
+    <section className="relative z-[1] py-24" ref={(node) => {
+      if (typeof ref === 'function') ref(node);
+      else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      (animRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    }} {...props}>
       <div className="container">
         <div className="text-center mb-14 fade-up">
           <div className="inline-flex items-center gap-1.5 bg-primary/[0.12] border border-primary/25 rounded-full px-3.5 py-1 text-xs text-electric font-medium tracking-wider uppercase mb-5">
@@ -57,6 +62,8 @@ const BlogSection = () => {
       </div>
     </section>
   );
-};
+});
+
+BlogSection.displayName = "BlogSection";
 
 export default BlogSection;
