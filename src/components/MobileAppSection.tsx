@@ -5,7 +5,7 @@ const MobileAppSection = forwardRef<HTMLDivElement>((props, ref) => {
   const animRef = useInViewAnimation();
 
   return (
-    <section className="relative z-[1] py-24" ref={(node) => {
+    <section className="relative z-[1] py-24" ref={(node: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(node);
       else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
       (animRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
