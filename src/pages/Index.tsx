@@ -39,22 +39,34 @@ const Index = () => {
         <ScrollProgress />
         <BackgroundOrbs />
         <NavBar />
-        <HeroSection />
+        <div id="hero">
+          <HeroSection />
+        </div>
         <StatsTicker />
         <SocialProof />
         <AppPreview />
         <DemoSection />
         <TryItSection />
         <Suspense fallback={<SectionFallback />}>
-          <FeaturesSection />
-          <HowItWorks />
+          <div id="features">
+            <FeaturesSection />
+          </div>
+          <div id="how-it-works">
+            <HowItWorks />
+          </div>
           <BeforeAfterSection />
           <SubjectsSection />
           <ComparisonSection />
           <CitationsSection />
-          <TestimonialsSection />
-          <PricingSection />
-          <DownloadSection />
+          <div id="testimonials">
+            <TestimonialsSection />
+          </div>
+          <div id="pricing">
+            <PricingSection />
+          </div>
+          <div id="download">
+            <DownloadSection />
+          </div>
           <WaitlistSection />
           <MobileAppSection />
           <BlogSection />

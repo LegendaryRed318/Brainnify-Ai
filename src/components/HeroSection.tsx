@@ -107,20 +107,20 @@ const HeroSection = () => {
 
           {/* Stats */}
           <motion.div
-            className="grid grid-cols-3 gap-8 text-center"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full mt-6 text-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.8 }}
           >
-            <div className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10">
+            <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-white/5 border border-white/10 w-full min-w-0">
               <div className="text-3xl font-bold text-purple-400 mb-2">50,000+</div>
               <div className="text-sm text-gray-400">Active Students</div>
             </div>
-            <div className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10">
+            <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-white/5 border border-white/10 w-full min-w-0">
               <div className="text-3xl font-bold text-indigo-400 mb-2">4.9★</div>
               <div className="text-sm text-gray-400">User Rating</div>
             </div>
-            <div className="p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10">
+            <div className="flex flex-col items-center justify-center p-4 rounded-xl bg-white/5 border border-white/10 w-full min-w-0">
               <div className="text-3xl font-bold text-purple-400 mb-2">200+</div>
               <div className="text-sm text-gray-400">Study Topics</div>
             </div>

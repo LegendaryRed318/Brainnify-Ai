@@ -2,45 +2,30 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const SectionProgress = () => {
+  const sectionIds = ['hero', 'features', 'how-it-works', 'pricing', 'testimonials', 'download'];
   const [activeSection, setActiveSection] = useState('hero');
-  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    const sections = [
-      { id: 'hero', name: 'Home' },
-      { id: 'features', name: 'Features' },
-      { id: 'how-it-works', name: 'How It Works' },
-      { id: 'pricing', name: 'Pricing' },
-      { id: 'testimonials', name: 'Testimonials' },
-      { id: 'download', name: 'Download' }
-    ];
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    sections.forEach(({ id }) => {
+    const observers: IntersectionObserver[] = [];
+    
+    sectionIds.forEach((id) => {
       const element = document.getElementById(id);
-      if (element) {
-        observerRef.current?.observe(element);
-      }
+      if (!element) return;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          }
+        },
+        { threshold: 0.3, rootMargin: '-10% 0px -10% 0px' }
+      );
+      
+      observer.observe(element);
+      observers.push(observer);
     });
-
-    return () => {
-      sections.forEach(({ id }) => {
-        const element = document.getElementById(id);
-        if (element) {
-          observerRef.current?.unobserve(element);
-        }
-      });
-    };
+    
+    return () => observers.forEach(obs => obs.disconnect());
   }, []);
 
   return (

@@ -7,10 +7,10 @@ const BeforeAfterSection = () => {
   return (
     <section className="py-20 px-[5%]" ref={ref}>
       <div className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="flex flex-col lg:flex-row items-stretch gap-6 relative w-full">
           {/* Before Side */}
           <motion.div
-            className="bg-white/5 border border-white/10 rounded-2xl p-6 relative"
+            className="bg-white/5 border border-white/10 rounded-2xl p-6 relative flex-1 min-w-0"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0 }}
@@ -31,17 +31,19 @@ const BeforeAfterSection = () => {
             </div>
           </motion.div>
 
-          {/* VS Divider */}
-          <div className="relative flex items-center justify-center">
-            <div className="absolute h-full w-0.5 bg-gradient-to-b from-purple-500 via-purple-600 to-indigo-600 rounded-full" />
-            <div className="bg-black/80 backdrop-blur-sm px-3 py-1 rounded-full border border-purple-400/30">
-              <span className="text-purple-300 font-grotesk text-xs font-bold">VS</span>
-            </div>
+          {/* Mobile VS Separator */}
+          <div className="flex lg:hidden self-center text-white/40 text-sm font-bold py-1">
+            VS
+          </div>
+
+          {/* Desktop VS Badge */}
+          <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 border border-white/20 items-center justify-center text-white/60 text-sm font-bold">
+            VS
           </div>
 
           {/* After Side */}
           <motion.div
-            className="bg-white/5 border border-white/10 rounded-2xl p-6 relative border-purple-500/20"
+            className="bg-white/5 border border-white/10 rounded-2xl p-6 relative border-purple-500/20 flex-1 min-w-0"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}

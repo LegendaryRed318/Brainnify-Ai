@@ -54,18 +54,21 @@ const AppPreview = () => {
         </div>
 
         {/* Keyboard shortcuts hint */}
-        <div className="px-8 pb-5 flex items-center justify-center gap-6 border-t border-border pt-4">
+        <div className="px-4 md:px-8 pb-5 flex items-center justify-center overflow-x-auto gap-4 md:gap-6 border-t border-border pt-4 max-w-[90vw]">
           {[
             { keys: "⌘+V", label: "Paste notes" },
             { keys: "⏎", label: "Generate" },
             { keys: "⌘+S", label: "Save kit" },
             { keys: "Tab", label: "Switch mode" },
           ].map((shortcut) => (
-            <div key={shortcut.keys} className="flex items-center gap-2">
+            <div key={shortcut.keys} className="flex items-center gap-2 flex-shrink-0">
               <kbd className="bg-foreground/[0.08] border border-border rounded px-1.5 py-0.5 text-[0.65rem] font-mono text-electric font-semibold">
                 {shortcut.keys}
               </kbd>
-              <span className="text-[0.65rem] text-muted-foreground">{shortcut.label}</span>
+              <span className="text-[0.65rem] text-muted-foreground">
+                <span className="hidden md:inline">{shortcut.label}</span>
+                <span className="md:hidden">{shortcut.label.split(' ')[0]}</span>
+              </span>
             </div>
           ))}
         </div>
