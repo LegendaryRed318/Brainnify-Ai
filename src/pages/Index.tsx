@@ -2,7 +2,6 @@ import { useState, useCallback, lazy, Suspense } from "react";
 import ScrollProgress from "@/components/ScrollProgress";
 import NavBar from "@/components/NavBar";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
-import CinematicIntro from "@/components/CinematicIntro";
 import InteractiveGrid from "@/components/InteractiveGrid";
 import HeroSection from "@/components/HeroSection";
 import AppPreview from "@/components/AppPreview";
@@ -27,20 +26,9 @@ const FooterSection = lazy(() => import("@/components/FooterSection"));
 const SectionFallback = () => <div className="py-20" />;
 
 const Index = () => {
-  const [introComplete, setIntroComplete] = useState(false);
-  const handleIntroComplete = useCallback(() => setIntroComplete(true), []);
-
   return (
     <>
-      <CinematicIntro onComplete={handleIntroComplete} />
-      <div
-        className="relative"
-        style={{
-          opacity: introComplete ? 1 : 0,
-          transform: introComplete ? "translateY(0)" : "translateY(30px)",
-          transition: "opacity 0.7s ease-out, transform 0.7s ease-out",
-        }}
-      >
+      <div className="relative">
         <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
           <InteractiveGrid />
         </div>

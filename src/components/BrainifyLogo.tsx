@@ -34,7 +34,7 @@ export const BrainifyLogo = forwardRef<HTMLSpanElement, BrainifyLogoProps>(funct
         />
       </span>
       {showText && (
-        <span className={`font-heading font-semibold text-foreground ${textSize}`}>
+        <span className={`font-clash font-semibold text-foreground ${textSize}`}>
           Brainify AI
         </span>
       )}

@@ -16,6 +16,9 @@ export default {
       fontFamily: {
         heading: ["Syne", "sans-serif"],
         body: ["DM Sans", "sans-serif"],
+        clash: ["Clash Display", "sans-serif"],
+        cal: ["Cal Sans", "sans-serif"],
+        grotesk: ["Space Grotesk", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

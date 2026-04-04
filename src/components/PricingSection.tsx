@@ -1,9 +1,40 @@
 import { useState } from "react";
+import { motion, useInView, useScroll, useTransform, Variants } from "framer-motion";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 
 const PricingSection = () => {
   const ref = useInViewAnimation();
   const [billing, setBilling] = useState<"monthly" | "annual">("annual");
+  
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1
+      }
+    }
+  };
+  
+  const cardVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 30,
+      scale: 0.95
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring" as const,
+        stiffness: 100,
+        damping: 15,
+        duration: 0.6
+      }
+    }
+  };
 
   const freeFeatures = [
     { text: "10 AI generations per day", included: true },
@@ -57,9 +88,29 @@ const PricingSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto fade-up fade-up-d1">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {/* Free */}
-          <div className="bg-surface border border-border rounded-2xl p-8 md:p-10 relative transition-all duration-200 hover:-translate-y-1 hover:border-primary/20">
+          <motion.div 
+            className="bg-surface border border-border rounded-2xl p-8 md:p-10 relative"
+            variants={cardVariants}
+            whileHover={{ 
+              y: -8,
+              scale: 1.02,
+              borderColor: "rgba(99, 102, 241, 0.3)",
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 20
+              }
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
             <div className="font-heading text-sm font-bold tracking-widest uppercase text-muted-foreground mb-5">Free</div>
             <div className="font-heading text-5xl font-bold tracking-tighter leading-none mb-2">£0</div>
             <div className="text-muted-foreground text-sm mb-8">Forever free</div>
@@ -83,12 +134,29 @@ const PricingSection = () => {
               Download free
             </a>
             <p className="text-dim text-xs mt-3 text-center">No account required · 4.2 MB · Uninstall in one click</p>
-          </div>
+          </motion.div>
 
           {/* Scholar Mode */}
-          <div className="relative rounded-2xl p-[1px] overflow-hidden transition-all duration-200 hover:-translate-y-1">
-            <div className="absolute inset-0 animate-border-rotate rounded-2xl" />
-            <div className="relative bg-surface rounded-2xl p-8 md:p-10 bg-gradient-to-br from-primary/[0.12] to-surface">
+          <motion.div 
+            className="relative rounded-2xl overflow-hidden"
+            variants={cardVariants}
+            whileHover={{ 
+              y: -8,
+              scale: 1.02,
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 20
+              }
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="absolute inset-0 rounded-2xl">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary via-accent to-primary animate-spin-slow opacity-80" />
+              <div className="absolute inset-[2px] rounded-2xl bg-surface" />
+            </div>
+            <div className="relative p-[1px] rounded-2xl bg-gradient-to-br from-primary/[0.12] to-surface">
+              <div className="relative bg-surface rounded-2xl p-8 md:p-10">
               <div className="absolute -top-3 right-6 bg-gradient-to-r from-primary to-accent text-primary-foreground px-4 py-1.5 rounded-lg text-[0.7rem] font-bold tracking-wider uppercase whitespace-nowrap z-10">
                 BEST VALUE
               </div>
@@ -141,9 +209,10 @@ const PricingSection = () => {
               </a>
               <p className="text-dim text-xs mt-3 text-center">No account required · 4.2 MB · Uninstall in one click</p>
               <p className="text-center text-muted-foreground text-xs mt-2">Chosen by 78% of Brainify users</p>
+              </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
