@@ -4,12 +4,15 @@ import NavBar from "@/components/NavBar";
 import BackgroundOrbs from "@/components/BackgroundOrbs";
 import InteractiveGrid from "@/components/InteractiveGrid";
 import HeroSection from "@/components/HeroSection";
+import StatsTicker from "@/components/StatsTicker";
+import SocialProof from "@/components/SocialProof";
 import AppPreview from "@/components/AppPreview";
 import DemoSection from "@/components/DemoSection";
 import TryItSection from "@/components/TryItSection";
 
 const FeaturesSection = lazy(() => import("@/components/FeaturesSection"));
 const HowItWorks = lazy(() => import("@/components/HowItWorks"));
+const BeforeAfterSection = lazy(() => import("@/components/BeforeAfterSection"));
 const SubjectsSection = lazy(() => import("@/components/SubjectsSection"));
 const ComparisonSection = lazy(() => import("@/components/ComparisonSection"));
 const CitationsSection = lazy(() => import("@/components/CitationsSection"));
@@ -37,12 +40,15 @@ const Index = () => {
         <BackgroundOrbs />
         <NavBar />
         <HeroSection />
+        <StatsTicker />
+        <SocialProof />
         <AppPreview />
         <DemoSection />
         <TryItSection />
         <Suspense fallback={<SectionFallback />}>
           <FeaturesSection />
           <HowItWorks />
+          <BeforeAfterSection />
           <SubjectsSection />
           <ComparisonSection />
           <CitationsSection />

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import { forwardRef } from 'react';
 import { BrainifyLogo } from "@/components/BrainifyLogo";
 
-const FooterSection = () => {
+const FooterSection = forwardRef<HTMLElement, {}>((props, ref) => {
   return (
-    <footer className="relative z-[1] border-t border-border">
+    <footer className="relative z-[1] border-t border-border" ref={ref} {...props}>
       {/* Animated gradient line */}
       <div className="h-[2px] bg-gradient-to-r from-transparent via-primary to-accent bg-[length:200%_100%] animate-shimmer" />
 
@@ -56,6 +57,7 @@ const FooterSection = () => {
       </div>
     </footer>
   );
-};
+});
 
+FooterSection.displayName = 'FooterSection';
 export default FooterSection;

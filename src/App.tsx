@@ -9,6 +9,8 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLenis } from "@/hooks/useLenis";
 import CursorGlow from "@/components/CursorGlow";
 import CinematicIntro from "@/components/CinematicIntro";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
+import SectionProgress from "@/components/SectionProgress";
 import Index from "./pages/Index.tsx";
 import Privacy from "./pages/Privacy.tsx";
 import Terms from "./pages/Terms.tsx";
@@ -54,6 +56,8 @@ const App = () => {
               <Toaster />
               <Sonner />
               {shouldAnimate && <CursorGlow />}
+              <StickyMobileCTA />
+              <SectionProgress />
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Index />} />

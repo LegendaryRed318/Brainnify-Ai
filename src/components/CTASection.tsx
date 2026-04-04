@@ -1,11 +1,12 @@
+import { forwardRef } from 'react';
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 
-const CTASection = () => {
-  const ref = useInViewAnimation();
+const CTASection = forwardRef<HTMLDivElement, {}>((props, ref) => {
+  const inViewRef = useInViewAnimation();
 
   return (
-    <section id="cta" className="relative z-[1] py-36 px-[5%] text-center" ref={ref}>
-      <div className="max-w-3xl mx-auto relative">
+    <section id="cta" className="relative z-[1] py-36 px-[5%] text-center" ref={inViewRef}>
+      <div className="max-w-3xl mx-auto relative" {...props}>
         <div className="absolute w-[500px] h-[300px] bg-[radial-gradient(ellipse,rgba(124,58,237,0.25)_0%,transparent_70%)] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
 
         <div className="relative inline-flex items-center gap-1.5 bg-primary/[0.12] border border-primary/25 rounded-full px-3.5 py-1 text-xs text-electric font-medium tracking-wider uppercase mb-6 fade-up">
@@ -25,6 +26,7 @@ const CTASection = () => {
       </div>
     </section>
   );
-};
+});
 
+CTASection.displayName = 'CTASection';
 export default CTASection;
